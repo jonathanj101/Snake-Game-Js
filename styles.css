@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  border: 2px solid red;
+  display: flex;
+  justify-content: center;
+  margin: 5% auto 0 auto;
+}
+
+#SnakeGame-canvas {
+  height: 600px;
+  width: 600px;
+  background-color: black;
+}
+
+ul li {
+  list-style: none;
+}
