@@ -10,12 +10,37 @@ body {
   margin: 5% auto 0 auto;
 }
 
-#SnakeGame-canvas {
-  height: 600px;
-  width: 600px;
-  background-color: black;
+#canvas-container {
+  border: 2px solid purple;
+}
+
+canvas {
+  background-color: azure;
+}
+
+.scores {
+  display: flex;
+  justify-content: space-around;
+  background-color: azure;
+}
+
+.scores p {
+  font-size: 1.75rem;
+}
+
+ul p {
+  font-size: 1.75rem;
+  font-weight: bold;
 }
 
 ul li {
   list-style: none;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10%;
+}
+
+ul li span {
+  font-weight: bold;
 }
