@@ -9,11 +9,15 @@
 </head>
 <body>
     <div class="main-container">
-        <div class="canvas-container">
-            <canvas id='SnakeGame-canvas'></canvas>
+        <div id="canvas-container">
+            <div class="scores">
+                <p>Score: </p>
+                <p>High Score: </p>
+            </div>
+            <canvas id='canvas' width="600" height="600"></canvas>
         </div>
         <ul>
-            <li>Instructions</li>
+            <p>Instructions</p>
             <li>
                 <span>Move Up</span>
                 <i class="fas fa-arrow-circle-up"></i>
@@ -32,5 +36,6 @@
             </li>
         </ul>
     </div>
+    <script src="main.js"></script>
 </body>
 </html>
