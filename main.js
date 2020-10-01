@@ -1,7 +1,7 @@
 var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext("2d")
 
-var coords = 5
+var coords = 15
 
 
 window.onload = function () {
@@ -9,10 +9,13 @@ window.onload = function () {
     canvas = document.getElementById('canvas')
     canvasContext = canvas.getContext("2d")
 
-    var fps = 30
+    var fps = 15
 
     setInterval(function () {
-        createCanvas()
+        createCanvas();
+        if (snakeBody[0].x === apple.x && snake.body[0].y === apple.y) {
+            alert('ok')
+        }
         create_rect();
     }, 1000 / fps)
 }
@@ -36,11 +39,29 @@ var snake = {
 // }))
 
 // console.log(`x co-ordinates ${snake_body_x}, y co-ordirnates ${snake_body_y}`)
+// function multiple(min, max) {
+//     debugger
+//     if (min > max) {
+//         return (max)
+//     }
+//     if (min == max) {
+//         return min
+//     }
+//     return (min + parseInt(Math.floor(Math.random() * (max - min))))
+// }
+
+function multiple(min, max) {
+    return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
+}
+
+// console.log(multiple(15, canvas.width))
 
 var apple = {
-    x: Math.floor(1 + (Math.random() * canvas.width)),
-    y: Math.floor(1 + (Math.random() * canvas.width))
+    x: multiple(15, canvas.width),
+    y: multiple(15, canvas.height)
 }
+// console.log(Math.floor(Math.random() * (canvas.width - 15)))
+// console.log(apple.x)
 console.log(apple.x, apple.y)
 let dir;
 let snakeCopy = []
@@ -53,7 +74,7 @@ let snakeCopy = []
 
 function createCanvas() {
     create_rect(0, 0, 600, 600, 'black')
-    create_rect(apple.x - 15, apple.y - 10, 10, 10, 'red')
+    create_rect(apple.x, apple.y, 15, 15, 'red')
 
     snake.body.forEach(snakeParts => {
         snakeCopy.push(snakeParts)
