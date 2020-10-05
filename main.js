@@ -1,153 +1,65 @@
 var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext("2d")
+var playerScore = document.getElementById("playerScore")
+var highScore = document.getElementById("highScore")
 
 var coords = 15
 
+var snake = {
+    // snake body cords
+    body: [
+        { x: 150, y: 300 },
+        { x: 135, y: 300 },
+        { x: 120, y: 300 },
+        { x: 105, y: 300 }
+    ]
+}
+
+var apple = {
+    x: multiple(15, canvas.width - 15),
+    y: multiple(15, canvas.height - 15)
+}
+let dir;
 
 window.onload = function () {
     // debugger
-    canvas = document.getElementById('canvas')
-    canvasContext = canvas.getContext("2d")
+
 
     var fps = 15
 
     setInterval(function () {
         createCanvas();
-        if (snakeBody[0].x === apple.x && snake.body[0].y === apple.y) {
-            alert('ok')
+        drawApple(apple.x, apple.y)
+        drawSnake(snake)
+        createSnakeCopy(snake)
+        if (snake.body[0].x === apple.x && snake.body[0].y === apple.y) {
+            apple = {
+                x: multiple(15, canvas.width - 15),
+                y: multiple(15, canvas.height - 15)
+            }
         }
-        create_rect();
     }, 1000 / fps)
 }
 
-var snake = {
-    // snake body cords
-    body: [
-        { x: 100, y: 300 },
-        // { x: 80, y: 300 },
-    ]
-}
 
-// let snake_body_x = []
-
-// let snake_body_y = []
-
-// console.log(snake.body.forEach(e => {
-//     console.log(e.x)
-//     snake_body_x.push(e.x)
-//     snake_body_y.push(e.y)
-// }))
-
-// console.log(`x co-ordinates ${snake_body_x}, y co-ordirnates ${snake_body_y}`)
-// function multiple(min, max) {
-//     debugger
-//     if (min > max) {
-//         return (max)
-//     }
-//     if (min == max) {
-//         return min
-//     }
-//     return (min + parseInt(Math.floor(Math.random() * (max - min))))
-// }
 
 function multiple(min, max) {
     return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
 }
 
-// console.log(multiple(15, canvas.width))
-
-var apple = {
-    x: multiple(15, canvas.width),
-    y: multiple(15, canvas.height)
-}
-// console.log(Math.floor(Math.random() * (canvas.width - 15)))
-// console.log(apple.x)
-console.log(apple.x, apple.y)
-let dir;
-let snakeCopy = []
-
-// snake.body.forEach(snakeParts => {
-//     snakeCopy.push(snakeParts)
-//     console.log(snakeCopy)
-// })
-// console.log(snakeCopy)
-
 function createCanvas() {
-    create_rect(0, 0, 600, 600, 'black')
-    create_rect(apple.x, apple.y, 15, 15, 'red')
-
-    snake.body.forEach(snakeParts => {
-        snakeCopy.push(snakeParts)
-    })
-    snakeCopy.forEach(snakeParts => {
-        create_rect(snakeParts.x, snakeParts.y, 15, 15, 'blue')
-    })
-
-    // for (let i = 0; i < snake.body.length; i++) {
-    //     create_rect(snake.body[i].x, snake.body[i].y, 15, 15, 'blue')
-    // }
-    // let snake_x = snake_body_x
-    // let snake_y = snake_body_y
-    // debugger
-    if (dir === 'UP') {
-        // debugger
-        snakeCopy[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - coords }
-        // snake.body.forEach(y_cords => {
-        //     y_cords.y -= coords
-
-        // })
-        // snake.body[0] = { y: snake_y[0] -= x_speed }
-        // snake.body[1] = { y: snake_y[1] -= x_speed }
-        // snake.body[2] = { y: snake_y[2] -= x_speed }
-        // snake.body[3] = { y: snake_y[3] -= x_speed }
-    }
-    if (dir === 'DOWN') {
-        snakeCopy[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + coords }
-        // snake.body.forEach(y_cords => {
-        //     y_cords.y += coords
-
-        // })
-        // snake.body[0] = { x: snake_x[0], y: snake_y[0] += x_speed }
-        // snake.body[1] = { x: snake_x[0], y: snake_y[1] += x_speed }
-        // snake.body[2] = { x: snake_x[0], y: snake_y[2] += x_speed }
-        // snake.body[3] = { x: snake_x[0], y: snake_y[3] += x_speed }
-    }
-    if (dir === 'RIGHT') {
-        snakeCopy[0] = { x: snakeCopy[0].x + coords, y: snakeCopy[0].y }
-        // snake.body.forEach(x_cords => {
-        //     x_cords.x += coords
-        // })
-        // snake.body[0] = { x: snake_x[0] += x_speed, y: snake_y[0] }
-        // snake.body[1] = { x: snake_x[1] += x_speed, y: snake_y[1] }
-        // snake.body[2] = { x: snake_x[2] += x_speed, y: snake_y[2] }
-        // snake.body[3] = { x: snake_x[3] += x_speed, y: snake_y[3] }
-    }
-    if (dir === 'LEFT') {
-        snakeCopy[0] = { x: snakeCopy[0].x - coords, y: snakeCopy[0].y }
-        // snake.body.forEach(x_cords => {
-        //     x_cords.x -= coords
-        // })
-        // snake.body[0] = { x: snake_x[0] -= x_speed, y: snake_y[0] }
-        // snake.body[1] = { x: snake_x[1] -= x_speed, y: snake_y[0] }
-        // snake.body[2] = { x: snake_x[2] -= x_speed, y: snake_y[0] }
-        // snake.body[3] = { x: snake_x[3] -= x_speed, y: snake_y[0] }
-
-    }
-
-    // for (let i = 0; i < snake.body.length - 1; i++) {
-    //     snake.body[i + 1] = { x: snake.body[i].x, y: snake.body[i].y };
-    // }
-
-    // if (snake.body[0].x === apple.x) {
-    //     // apple = {
-    //     //     x: Math.floor(300 + (Math.random() * (canvas.width - 1))) * 600,
-    //     //     y: Math.floor(300 + (Math.random() * (canvas.width - 1))) * 600
-    //     // }
-    // }
-
+    canvas = document.getElementById('canvas')
+    canvasContext = canvas.getContext("2d")
+    createRect(0, 0, canvas.width, canvas.height, 'black')
 }
 
-function create_rect(x, y, w, h, color) {
+function drawApple(appleX, appleY) {
+    var canvas = document.getElementById('canvas')
+    var canvasContext = canvas.getContext("2d")
+    createRect(appleX, appleY, 15, 15, 'red')
+}
+
+function createRect(x, y, w, h, color) {
     canvasContext.fillStyle = color
     canvasContext.fillRect(x, y, w, h)
 }
@@ -168,13 +80,69 @@ function direction(event) {
     }
 }
 
-function gameOver() {
-    if (snake.body[0].x === canvas.width || snake.body[0].y == canvas.height) {
-        alert('Game has ended')
-    }
+function drawSnake(snake) {
+    snake.body.forEach(snakePart => {
+        createRect(snakePart.x, snakePart.y, 15, 15, 'blue')
+    })
+    return snake.body
+
 }
-// function createSnake(snakeBody){
 
+function createSnakeCopy(snakeBody) {
+    let snakeCopy = []
+
+    snakeBody.body.forEach(snakePart => {
+        // snakeCopy.push(snakePart)
+        snakeCopy.push({ x: snakePart.x, y: snakePart.y })
+    })
+
+    moveSnake(dir, snakeCopy)
+}
+
+function moveSnake(dir, snakeCopy) {
+
+    // debugger
+    if (dir === 'UP') {
+        // debugger
+        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - coords }
+        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) - coords }
+        snake.body[2] = { x: snakeCopy[0].x, y: (snakeCopy[1].y - 15) - coords }
+        snake.body[3] = { x: snakeCopy[0].x, y: (snakeCopy[2].y - 15) - coords }
+
+    }
+    if (dir === 'DOWN') {
+        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + coords }
+        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) + coords }
+        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y - 15) + coords }
+        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y - 15) + coords }
+
+    }
+    if (dir === 'RIGHT') {
+        snake.body[0] = { x: (snakeCopy[0].x + coords), y: snakeCopy[0].y }
+        snake.body[1] = { x: (snakeCopy[0].x + 15) + coords, y: snakeCopy[0].y }
+        snake.body[2] = { x: (snakeCopy[1].x + 15) + coords, y: snakeCopy[1].y }
+        snake.body[3] = { x: (snakeCopy[2].x + 15) + coords, y: snakeCopy[2].y }
+
+    }
+    if (dir === 'LEFT') {
+        snake.body[0] = { x: snakeCopy[0].x - coords, y: snakeCopy[0].y }
+        snake.body[1] = { x: (snakeCopy[0].x - 15) - coords, y: snakeCopy[0].y }
+        snake.body[2] = { x: (snakeCopy[1].x - 15) - coords, y: snakeCopy[0].y }
+        snake.body[3] = { x: (snakeCopy[2].x - 15) - coords, y: snakeCopy[0].y }
+    }
+    // for (let i = 0; i < snake.body.length - 1; i++) {
+    //     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
+    //     // console.log(snakeBody.body[i])
+    // }
+    // for (let i = 0; i < snake.body.length - 1; i++) {
+    //     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
+    // }
+
+}
+// leaving this part for last
+// function gameOver() {
+//     if (snake.body[0].x >= canvas.width & snake.body[0].y >= canvas.height) {
+//         alert('Game has ended')
+//     }
 // }
-
 document.addEventListener('keyup', direction)
