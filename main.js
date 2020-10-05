@@ -15,6 +15,8 @@ var snake = {
     ]
 }
 
+console.log(snake.body[0])
+
 var apple = {
     x: multiple(15, canvas.width - 15),
     y: multiple(15, canvas.height - 15)
@@ -81,9 +83,16 @@ function direction(event) {
 }
 
 function drawSnake(snake) {
-    snake.body.forEach(snakePart => {
-        createRect(snakePart.x, snakePart.y, 15, 15, 'blue')
-    })
+    for (let i = 0; i < snake.body.length; i++) {
+        createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'blue')
+        createRect(snake.body[1].x, snake.body[1].y, 15, 15, 'red')
+        createRect(snake.body[2].x, snake.body[2].y, 15, 15, 'red')
+        createRect(snake.body[3].x, snake.body[3].y, 15, 15, 'red')
+    }
+    // snake.body.forEach(snakePart => {
+    //     createRect(snakePart.x, snakePart.y, 15, 15, 'blue')
+    //     // createRect(snakePart[1, -1].x, snakePart[1, -1].y, 'red')
+    // })
     return snake.body
 
 }
@@ -95,7 +104,6 @@ function createSnakeCopy(snakeBody) {
         // snakeCopy.push(snakePart)
         snakeCopy.push({ x: snakePart.x, y: snakePart.y })
     })
-
     moveSnake(dir, snakeCopy)
 }
 
@@ -113,12 +121,12 @@ function moveSnake(dir, snakeCopy) {
     if (dir === 'DOWN') {
         snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + coords }
         snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) + coords }
-        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y - 15) + coords }
-        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y - 15) + coords }
+        snake.body[2] = { x: snakeCopy[0].x, y: (snakeCopy[1].y - 15) + coords }
+        snake.body[3] = { x: snakeCopy[0].x, y: (snakeCopy[2].y - 15) + coords }
 
     }
     if (dir === 'RIGHT') {
-        snake.body[0] = { x: (snakeCopy[0].x + coords), y: snakeCopy[0].y }
+        snake.body[0] = { x: snake.body[0].x + coords, y: snake.body[0].y }
         snake.body[1] = { x: (snakeCopy[0].x + 15) + coords, y: snakeCopy[0].y }
         snake.body[2] = { x: (snakeCopy[1].x + 15) + coords, y: snakeCopy[1].y }
         snake.body[3] = { x: (snakeCopy[2].x + 15) + coords, y: snakeCopy[2].y }
