@@ -1,3 +1,5 @@
+
+
 var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext("2d")
 var playerScore = document.getElementById("playerScore")
@@ -67,7 +69,7 @@ function createRect(x, y, w, h, color) {
 }
 
 function direction(event) {
-
+    // debugger
     if (event.keyCode === 37) {
         dir = 'LEFT'
     }
@@ -85,9 +87,9 @@ function direction(event) {
 function drawSnake(snake) {
     for (let i = 0; i < snake.body.length; i++) {
         createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'blue')
-        createRect(snake.body[1].x, snake.body[1].y, 15, 15, 'red')
-        createRect(snake.body[2].x, snake.body[2].y, 15, 15, 'red')
-        createRect(snake.body[3].x, snake.body[3].y, 15, 15, 'red')
+        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
+        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
+        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
     }
     // snake.body.forEach(snakePart => {
     //     createRect(snakePart.x, snakePart.y, 15, 15, 'blue')
@@ -109,34 +111,36 @@ function createSnakeCopy(snakeBody) {
 
 function moveSnake(dir, snakeCopy) {
 
-    // debugger
     if (dir === 'UP') {
         // debugger
         snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - coords }
-        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) - coords }
-        snake.body[2] = { x: snakeCopy[0].x, y: (snakeCopy[1].y - 15) - coords }
-        snake.body[3] = { x: snakeCopy[0].x, y: (snakeCopy[2].y - 15) - coords }
+        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y + 15) - coords }
+        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y + 15) - coords }
+        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y + 15) - coords }
 
     }
     if (dir === 'DOWN') {
+        // debugger
         snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + coords }
         snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) + coords }
-        snake.body[2] = { x: snakeCopy[0].x, y: (snakeCopy[1].y - 15) + coords }
-        snake.body[3] = { x: snakeCopy[0].x, y: (snakeCopy[2].y - 15) + coords }
+        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y - 15) + coords }
+        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y - 15) + coords }
 
     }
     if (dir === 'RIGHT') {
+        // debugger
         snake.body[0] = { x: snake.body[0].x + coords, y: snake.body[0].y }
-        snake.body[1] = { x: (snakeCopy[0].x + 15) + coords, y: snakeCopy[0].y }
-        snake.body[2] = { x: (snakeCopy[1].x + 15) + coords, y: snakeCopy[1].y }
-        snake.body[3] = { x: (snakeCopy[2].x + 15) + coords, y: snakeCopy[2].y }
+        snake.body[1] = { x: (snakeCopy[0].x - 15) + coords, y: snakeCopy[0].y }
+        snake.body[2] = { x: (snakeCopy[1].x - 15) + coords, y: snakeCopy[1].y }
+        snake.body[3] = { x: (snakeCopy[2].x - 15) + coords, y: snakeCopy[2].y }
 
     }
     if (dir === 'LEFT') {
+        // debugger
         snake.body[0] = { x: snakeCopy[0].x - coords, y: snakeCopy[0].y }
-        snake.body[1] = { x: (snakeCopy[0].x - 15) - coords, y: snakeCopy[0].y }
-        snake.body[2] = { x: (snakeCopy[1].x - 15) - coords, y: snakeCopy[0].y }
-        snake.body[3] = { x: (snakeCopy[2].x - 15) - coords, y: snakeCopy[0].y }
+        snake.body[1] = { x: (snakeCopy[0].x + 15) - coords, y: snakeCopy[0].y }
+        snake.body[2] = { x: (snakeCopy[1].x + 15) - coords, y: snakeCopy[1].y }
+        snake.body[3] = { x: (snakeCopy[2].x + 15) - coords, y: snakeCopy[2].y }
     }
     // for (let i = 0; i < snake.body.length - 1; i++) {
     //     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
