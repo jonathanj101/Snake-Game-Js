@@ -10,11 +10,10 @@ var snake = {
     // snake body cords
     body: [
         { x: 150, y: 300 },
-        { x: 135, y: 300 },
-        { x: 120, y: 300 },
-        { x: 105, y: 300 }
+
     ]
 }
+
 // for (let i = snake.body.length - 1; i > 0; i--) {
 //     //set the current body part's x and y equal to it's parent
 //     console.log((snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }))
@@ -49,7 +48,8 @@ window.onload = function () {
                 x: multiple(15, canvas.width - 15),
                 y: multiple(15, canvas.height - 15)
             }
-
+            snake.body.push({ x: snake.body[0].x, y: snake.body[0].y })
+            console.log(snake.body.length)
         }
     }, 1000 / fps)
 }
@@ -79,31 +79,29 @@ function createRect(x, y, w, h, color) {
 
 function direction(event) {
     // debugger
-    if (event.keyCode === 37) {
+    if (event.keyCode === 37 && dir != "RIGHT") {
         dir = 'LEFT'
     }
-    if (event.keyCode === 38) {
+    if (event.keyCode === 38 && dir != "DOWN") {
         dir = 'UP'
     }
-    if (event.keyCode === 39) {
+    if (event.keyCode === 39 && dir != "LEFT") {
         dir = 'RIGHT'
     }
-    if (event.keyCode === 40) {
+    if (event.keyCode === 40 && dir != "UP") {
         dir = 'DOWN'
     }
 }
 
 function drawSnake(snake) {
     for (let i = 0; i < snake.body.length; i++) {
-        createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'blue')
-        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
-        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
-        createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
+        if (i == 0) {
+            createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'blue')
+        } else {
+            createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
+        }
     }
-    // snake.body.forEach(snakePart => {
-    //     createRect(snakePart.x, snakePart.y, 15, 15, 'blue')
-    //     // createRect(snakePart[1, -1].x, snakePart[1, -1].y, 'red')
-    // })
+
     return snake.body
 
 }
@@ -120,41 +118,42 @@ function createSnakeCopy(snakeBody) {
 
 function moveSnake(dir, snakeCopy) {
     // loop through the snake.body backwards
-    for (let i = snake.body.length - 1; i > 0; i--) {
-        //set the current body part's x and y equal to it's parent
-        snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }
-    }
+
 
     if (dir === 'UP') {
         // debugger
         snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - coords }
-        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y + 15) - coords }
-        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y + 15) - coords }
-        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y + 15) - coords }
+        // snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y + 15) - coords }
+        // snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y + 15) - coords }
+        // snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y + 15) - coords }
 
     }
     if (dir === 'DOWN') {
         // debugger
         snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + coords }
-        snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) + coords }
-        snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y - 15) + coords }
-        snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y - 15) + coords }
+        // snake.body[1] = { x: snakeCopy[0].x, y: (snakeCopy[0].y - 15) + coords }
+        // snake.body[2] = { x: snakeCopy[1].x, y: (snakeCopy[1].y - 15) + coords }
+        // snake.body[3] = { x: snakeCopy[2].x, y: (snakeCopy[2].y - 15) + coords }
 
     }
     if (dir === 'RIGHT') {
         // debugger
         snake.body[0] = { x: snake.body[0].x + coords, y: snake.body[0].y }
-        snake.body[1] = { x: (snakeCopy[0].x - 15) + coords, y: snakeCopy[0].y }
-        snake.body[2] = { x: (snakeCopy[1].x - 15) + coords, y: snakeCopy[1].y }
-        snake.body[3] = { x: (snakeCopy[2].x - 15) + coords, y: snakeCopy[2].y }
+        // snake.body[1] = { x: (snakeCopy[0].x - 15) + coords, y: snakeCopy[0].y }
+        // snake.body[2] = { x: (snakeCopy[1].x - 15) + coords, y: snakeCopy[1].y }
+        // snake.body[3] = { x: (snakeCopy[2].x - 15) + coords, y: snakeCopy[2].y }
 
     }
     if (dir === 'LEFT') {
         // debugger
         snake.body[0] = { x: snakeCopy[0].x - coords, y: snakeCopy[0].y }
-        snake.body[1] = { x: (snakeCopy[0].x + 15) - coords, y: snakeCopy[0].y }
-        snake.body[2] = { x: (snakeCopy[1].x + 15) - coords, y: snakeCopy[1].y }
-        snake.body[3] = { x: (snakeCopy[2].x + 15) - coords, y: snakeCopy[2].y }
+        // snake.body[1] = { x: (snakeCopy[0].x + 15) - coords, y: snakeCopy[0].y }
+        // snake.body[2] = { x: (snakeCopy[1].x + 15) - coords, y: snakeCopy[1].y }
+        // snake.body[3] = { x: (snakeCopy[2].x + 15) - coords, y: snakeCopy[2].y }
+    }
+    for (let i = snake.body.length - 1; i > 0; i--) {
+        //set the current body part's x and y equal to it's parent
+        snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }
     }
 }
 // leaving this part for last
