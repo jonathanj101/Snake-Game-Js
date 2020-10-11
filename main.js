@@ -1,5 +1,4 @@
 
-
 var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext("2d")
 var playerScore = document.getElementById("playerScore")
@@ -16,8 +15,17 @@ var snake = {
         { x: 105, y: 300 }
     ]
 }
+// for (let i = snake.body.length - 1; i > 0; i--) {
+//     //set the current body part's x and y equal to it's parent
+//     console.log((snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }))
+// }
+// debugger
+// for (let i = 0; i < snake.body.length - 1; i++) {
+//     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
+//     console.log(snake.body[i - 1])
+// }
 
-console.log(snake.body[0])
+// console.log(snake.body[0])
 
 var apple = {
     x: multiple(15, canvas.width - 15),
@@ -41,6 +49,7 @@ window.onload = function () {
                 x: multiple(15, canvas.width - 15),
                 y: multiple(15, canvas.height - 15)
             }
+
         }
     }, 1000 / fps)
 }
@@ -110,6 +119,11 @@ function createSnakeCopy(snakeBody) {
 }
 
 function moveSnake(dir, snakeCopy) {
+    // loop through the snake.body backwards
+    for (let i = snake.body.length - 1; i > 0; i--) {
+        //set the current body part's x and y equal to it's parent
+        snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }
+    }
 
     if (dir === 'UP') {
         // debugger
@@ -142,14 +156,6 @@ function moveSnake(dir, snakeCopy) {
         snake.body[2] = { x: (snakeCopy[1].x + 15) - coords, y: snakeCopy[1].y }
         snake.body[3] = { x: (snakeCopy[2].x + 15) - coords, y: snakeCopy[2].y }
     }
-    // for (let i = 0; i < snake.body.length - 1; i++) {
-    //     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
-    //     // console.log(snakeBody.body[i])
-    // }
-    // for (let i = 0; i < snake.body.length - 1; i++) {
-    //     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
-    // }
-
 }
 // leaving this part for last
 // function gameOver() {
@@ -157,4 +163,4 @@ function moveSnake(dir, snakeCopy) {
 //         alert('Game has ended')
 //     }
 // }
-document.addEventListener('keyup', direction)
+document.addEventListener('keydown', direction)
