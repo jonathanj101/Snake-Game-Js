@@ -6,51 +6,31 @@ var highScore = document.getElementById("highScore")
 
 var coords = 15
 
-var snake = {
-    // snake body cords
-    body: [
-        { x: 150, y: 300 },
-
-    ]
-}
-
-// for (let i = snake.body.length - 1; i > 0; i--) {
-//     //set the current body part's x and y equal to it's parent
-//     console.log((snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }))
-// }
-// debugger
-// for (let i = 0; i < snake.body.length - 1; i++) {
-//     snake.body[i - 1] = { x: snake.body[i].x, y: snake.body[i].y }
-//     console.log(snake.body[i - 1])
-// }
-
-// console.log(snake.body[0])
-
-var apple = {
-    x: multiple(15, canvas.width - 15),
-    y: multiple(15, canvas.height - 15)
-}
 let dir;
 
 window.onload = function () {
     // debugger
 
+    var snake = {
+        // snake body cords
+        body: [
+            { x: 150, y: 300 },
+            { x: 135, y: 300 },
+            { x: 120, y: 300 },
+            { x: 105, y: 300 },
+
+        ]
+    }
+
+    var apple = {
+        x: multiple(15, canvas.width - 15),
+        y: multiple(15, canvas.height - 15)
+    }
 
     var fps = 15
 
     setInterval(function () {
-        createCanvas();
-        drawApple(apple.x, apple.y)
-        drawSnake(snake)
-        createSnakeCopy(snake)
-        if (snake.body[0].x === apple.x && snake.body[0].y === apple.y) {
-            apple = {
-                x: multiple(15, canvas.width - 15),
-                y: multiple(15, canvas.height - 15)
-            }
-            snake.body.push({ x: snake.body[0].x, y: snake.body[0].y })
-            console.log(snake.body.length)
-        }
+        main(snake, apple)
     }, 1000 / fps)
 }
 
@@ -58,6 +38,30 @@ window.onload = function () {
 
 function multiple(min, max) {
     return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
+}
+function main(snake, food) {
+    createCanvas()
+    drawApple(food.x, food.y)
+    drawSnake(snake)
+
+    let snakeCopy = createSnakeCopy(snake.body)
+
+    moveSnake(snake, snakeCopy)
+
+    if (snake.body[0].x === food.x && snake.body[0].y === food.y) {
+        snake.body.push({ x: snake.body[0].x, y: snake.body[0] })
+    }
+}
+
+function createSnakeCopy(snakeBody) {
+    let snakeCopy = []
+
+    snakeBody.forEach(snakePart => {
+        // snakeCopy.push(snakePart)
+        snakeCopy.push({ x: snakePart.x, y: snakePart.y })
+    })
+
+    return snakeCopy
 }
 
 function createCanvas() {
@@ -77,20 +81,21 @@ function createRect(x, y, w, h, color) {
     canvasContext.fillRect(x, y, w, h)
 }
 
-function direction(event) {
+function direction(direction) {
     // debugger
-    if (event.keyCode === 37 && dir != "RIGHT") {
+    if (direction.keyCode === 37 && dir != "RIGHT") {
         dir = 'LEFT'
     }
-    if (event.keyCode === 38 && dir != "DOWN") {
+    if (direction.keyCode === 38 && dir != "DOWN") {
         dir = 'UP'
     }
-    if (event.keyCode === 39 && dir != "LEFT") {
+    if (direction.keyCode === 39 && dir != "LEFT") {
         dir = 'RIGHT'
     }
-    if (event.keyCode === 40 && dir != "UP") {
+    if (direction.keyCode === 40 && dir != "UP") {
         dir = 'DOWN'
     }
+    console.log(direction.key)
 }
 
 function drawSnake(snake) {
@@ -102,22 +107,17 @@ function drawSnake(snake) {
         }
     }
 
-    return snake.body
-
 }
 
-function createSnakeCopy(snakeBody) {
-    let snakeCopy = []
 
-    snakeBody.body.forEach(snakePart => {
-        // snakeCopy.push(snakePart)
-        snakeCopy.push({ x: snakePart.x, y: snakePart.y })
-    })
-    moveSnake(dir, snakeCopy)
-}
 
-function moveSnake(dir, snakeCopy) {
+function moveSnake(snake, snakeCopy) {
     // loop through the snake.body backwards
+    for (let i = 0; i < snake.body.length - 1; i++) {
+        //set the current body part's x and y equal to it's parent
+        snake.body[i + 1] = { x: snakeCopy[i].x, y: snakeCopy[i].y }
+    }
+
 
 
     if (dir === 'UP') {
@@ -138,7 +138,7 @@ function moveSnake(dir, snakeCopy) {
     }
     if (dir === 'RIGHT') {
         // debugger
-        snake.body[0] = { x: snake.body[0].x + coords, y: snake.body[0].y }
+        snake.body[0] = { x: snakeCopy[0].x + coords, y: snakeCopy[0].y }
         // snake.body[1] = { x: (snakeCopy[0].x - 15) + coords, y: snakeCopy[0].y }
         // snake.body[2] = { x: (snakeCopy[1].x - 15) + coords, y: snakeCopy[1].y }
         // snake.body[3] = { x: (snakeCopy[2].x - 15) + coords, y: snakeCopy[2].y }
@@ -151,15 +151,7 @@ function moveSnake(dir, snakeCopy) {
         // snake.body[2] = { x: (snakeCopy[1].x + 15) - coords, y: snakeCopy[1].y }
         // snake.body[3] = { x: (snakeCopy[2].x + 15) - coords, y: snakeCopy[2].y }
     }
-    for (let i = snake.body.length - 1; i > 0; i--) {
-        //set the current body part's x and y equal to it's parent
-        snake.body[i] = { x: snake.body[i].x, y: snake.body[i].y }
-    }
+
 }
-// leaving this part for last
-// function gameOver() {
-//     if (snake.body[0].x >= canvas.width & snake.body[0].y >= canvas.height) {
-//         alert('Game has ended')
-//     }
-// }
+
 document.addEventListener('keydown', direction)
