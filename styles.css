@@ -4,14 +4,9 @@ body {
 }
 
 .main-container {
-  border: 2px solid red;
   display: flex;
   justify-content: center;
   margin: 5% auto 0 auto;
-}
-
-#canvas-container {
-  border: 2px solid purple;
 }
 
 canvas {
@@ -23,13 +18,13 @@ canvas {
   justify-content: space-around;
   background-color: azure;
 }
-
-.scores p {
+.scores i {
   font-size: 1.75rem;
+  margin: 5% auto;
+  color: blue;
 }
 
 ul {
-  background-image: ;
 }
 
 ul p {
@@ -41,7 +36,7 @@ ul li {
   list-style: none;
   font-size: 1.25rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 10%;
 }
 
