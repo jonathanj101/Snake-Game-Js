@@ -1,4 +1,3 @@
-
 var canvas = document.getElementById('canvas')
 var canvasContext = canvas.getContext("2d")
 var playerScore = document.getElementById("playerScore")
@@ -8,18 +7,15 @@ var coords = 15
 
 let dir;
 
-
 window.onload = function () {
+    getFromLocalStorage()
+
     var snake = {
         body: [
             { x: 150, y: 300 },
-            // { x: 135, y: 300 },
-            // { x: 120, y: 300 },
-            // { x: 105, y: 300 },
         ]
     }
-
-    let apple = {
+    var apple = {
         x: multiple(15, canvas.width - 15),
         y: multiple(15, canvas.height - 15)
     }
@@ -29,15 +25,13 @@ window.onload = function () {
     setInterval(function () {
         main(snake, apple)
         if (snake.body[0].x === apple.x && snake.body[0].y === apple.y) {
-            // debugger
-            snake.body.push({ x: snake.body[0].x, y: snake.body[0] })
-
-            console.log(apple)
-            apple = {
-                x: multiple(15, canvas.width - 15),
-                y: multiple(15, canvas.height - 15)
-            }
-            // console.log(apple)
+            snake.body.push({ x: snake.body[0].x, y: snake.body[0].y })
+            apple = generateApple(apple)
+            let parsedPlayerScore = parseInt(playerScore.textContent)
+            playerScore.textContent = parsedPlayerScore + 1
+        } else if (highScore.textContent === 0) {
+            highScore.textContent = playerScore.textContent
+            addToLocalStorage(highScore.textContent)
         }
     }, 1000 / fps)
 }
@@ -48,27 +42,17 @@ function main(snake, apple) {
     createCanvas()
     drawApple(apple)
     drawSnake(snake)
-    // didSnakeEatApple(snake, apple)
-
-
-
-    gameOver(snake)
-
     let snakeCopy = createSnakeCopy(snake.body)
-
     moveSnake(snake, snakeCopy)
+    gameOver(snake, snakeCopy)
 }
 function createSnakeCopy(snakeBody) {
     let snakeCopy = []
-
     snakeBody.forEach(snakePart => {
-        // snakeCopy.push(snakePart)
         snakeCopy.push({ x: snakePart.x, y: snakePart.y })
     })
-
     return snakeCopy
 }
-
 function createCanvas() {
     canvas = document.getElementById('canvas')
     canvasContext = canvas.getContext("2d")
@@ -77,7 +61,7 @@ function createCanvas() {
 function drawApple(apple) {
     canvas = document.getElementById('canvas')
     canvasContext = canvas.getContext("2d")
-    createRect(apple.x, apple.y, 15, 15, 'red')
+    createRect(apple.x, apple.y, 15, 15, 'green')
 }
 function createRect(x, y, w, h, color) {
     canvasContext.fillStyle = color
@@ -101,10 +85,13 @@ function direction(direction) {
 function drawSnake(snake) {
     for (let i = 0; i < snake.body.length; i++) {
         if (i == 0) {
-            createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'blue')
+            createRect(snake.body[0].x, snake.body[0].y, 15, 15, 'red')
         } else {
-            createRect(snake.body[i].x, snake.body[i].y, 15, 15, 'red')
+            canvasContext.strokeStyle = 'red'
+            canvasContext.strokeRect(snake.body[i].x, snake.body[i].y, 15, 15)
+            createRect(snake.body[i].x, snake.body[i].y, 10, 10, 'green')
         }
+
     }
 
 }
@@ -126,28 +113,37 @@ function moveSnake(snake, snakeCopy) {
         snake.body[0] = { x: snakeCopy[0].x - coords, y: snakeCopy[0].y }
     }
 }
-function didSnakeEatApple(snake, apple) {
-    if (snake.body[0].x === apple.x && snake.body[0].y === apple.y) {
-        // debugger
-        snake.body.push({ x: snake.body[0].x, y: snake.body[0] })
-
-        console.log(apple)
-        apple = {
-            x: multiple(15, canvas.width - 15),
-            y: multiple(15, canvas.height - 15)
+function generateApple(apple) {
+    apple = {
+        x: multiple(15, canvas.width - 15),
+        y: multiple(15, canvas.height - 15)
+    }
+    return apple
+}
+function gameOver(snake, snakeCopy) {
+    if (snake.body[0].x < -5 || snake.body[0].x > 600 || snake.body[0].y < 0 || snake.body[0].y > 600) {
+        location.reload()
+        alert("Oooopppss! Snake hit wall! Game Over")
+    }
+    if (snake.body.length > 1) {
+        for (let i = 0; i < snakeCopy.length; i++) {
+            if (snake.body[0].x == snakeCopy[i].x && snake.body[0].y == snakeCopy[i].y) {
+                location.reload()
+                alert("Oooopppss! Snake bite itself! Game Over")
+            }
         }
-        console.log(apple)
     }
 }
-function gameOver(snake) {
-    for (let i = 0; i < snake.body.length; i++) {
-        if (snake.body[0].x >= canvas.width && snake.body[0].y >= canvas.height) {
-            console.log("ok")
-
-        }
+function addToLocalStorage(score) {
+    localStorage.setItem("Score", JSON.stringify(score))
+}
+function getFromLocalStorage() {
+    score = JSON.parse(localStorage.getItem("Score"))
+    if (score !== null) {
+        highScore.textContent = score
+        console.log(`score: ${score}, highScore: ${highScore.textContent}`)
+    } else {
+        highScore.textContent = "0"
     }
 }
-
-
-
 document.addEventListener('keydown', direction)
