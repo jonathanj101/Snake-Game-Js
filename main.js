@@ -4,12 +4,12 @@ var playerScore = document.getElementById("playerScore")
 var highScore = document.getElementById("highScore")
 
 var coords = 15
-
 let dir;
+let score = 0
+
 
 window.onload = function () {
     getFromLocalStorage()
-
     var snake = {
         body: [
             { x: 150, y: 300 },
@@ -27,21 +27,23 @@ window.onload = function () {
         if (snake.body[0].x === apple.x && snake.body[0].y === apple.y) {
             snake.body.push({ x: snake.body[0].x, y: snake.body[0].y })
             apple = generateApple(apple)
-            let parsedPlayerScore = parseInt(playerScore.textContent)
+            let parsedPlayerScore = Number(playerScore.textContent)
             playerScore.textContent = parsedPlayerScore + 1
-        } else if (highScore.textContent === 0) {
-            highScore.textContent = playerScore.textContent
-            addToLocalStorage(highScore.textContent)
+            score += 1
+            addToLocalStorage(score)
         }
+
     }, 1000 / fps)
 }
 function multiple(min, max) {
     return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
 }
-function main(snake, apple) {
+function main(snake, apple, score) {
     createCanvas()
     drawApple(apple)
     drawSnake(snake)
+
+
     let snakeCopy = createSnakeCopy(snake.body)
     moveSnake(snake, snakeCopy)
     gameOver(snake, snakeCopy)
@@ -123,6 +125,7 @@ function generateApple(apple) {
 function gameOver(snake, snakeCopy) {
     if (snake.body[0].x < -5 || snake.body[0].x > 600 || snake.body[0].y < 0 || snake.body[0].y > 600) {
         location.reload()
+        score = 0
         alert("Oooopppss! Snake hit wall! Game Over")
     }
     if (snake.body.length > 1) {
@@ -130,6 +133,7 @@ function gameOver(snake, snakeCopy) {
             if (snake.body[0].x == snakeCopy[i].x && snake.body[0].y == snakeCopy[i].y) {
                 location.reload()
                 alert("Oooopppss! Snake bite itself! Game Over")
+                score = 0
             }
         }
     }
@@ -139,11 +143,8 @@ function addToLocalStorage(score) {
 }
 function getFromLocalStorage() {
     score = JSON.parse(localStorage.getItem("Score"))
-    if (score !== null) {
+    if (score > highScore.textContent) {
         highScore.textContent = score
-        console.log(`score: ${score}, highScore: ${highScore.textContent}`)
-    } else {
-        highScore.textContent = "0"
     }
 }
 document.addEventListener('keydown', direction)
