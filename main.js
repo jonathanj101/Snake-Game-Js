@@ -4,16 +4,18 @@ const playerScore = document.getElementById("playerScore")
 const highScore = document.getElementById("highScore")
 
 const COORDINATES = 15
-let score = 0
-
+let currentScore = 0
 
 window.onload = function () {
+    updateScoreFromLocalStorage()
+
     var snake = {
         body: [
             { x: 150, y: 300 },
         ],
         direction: undefined
     }
+
     var apple = {
         x: multiple(15, canvas.width - 15),
         y: multiple(15, canvas.height - 15)
@@ -21,7 +23,7 @@ window.onload = function () {
 
     var fps = 15
 
-    setInterval(main, 1000 / fps, snkae, apple)
+    setInterval(main, 1000 / fps, snake, apple)
 
     document.addEventListener('keydown', function (e) {
         if (e.keyCode === 37 && snake.direction != "RIGHT") {
@@ -39,29 +41,19 @@ window.onload = function () {
     })
 }
 
-function isSnakeEatingApple(snake, apple) {
-    return snake.body[0].x === apple.x && snake.body[0].y === apple.y
-
-}
-
-
-function multiple(min, max) {
-    return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
-}
-
 function main(snake, apple) {
     createCanvas()
     drawApple(apple)
     drawSnake(snake)
 
-
     moveSnake(snake)
 
-    const isCollidingWithWall = isSnakeCollidingWithWall(sanke) === true
+    const isCollidingWithWall = isSnakeCollidingWithWall(snake) === true
     const isCollidingWithItSelf = snake.body.length > 1 && isSnakeCollidingWithItSelf(snake) === true
+
     if (isCollidingWithWall || isCollidingWithItSelf === true) {
         location.reload()
-        score = 0
+        currentScore = 0
         alert(`Ooopss! ${isCollidingWithWall ? "Snake hit Wall" : "Snake bite itself"} Game Over!`)
     }
 
@@ -74,13 +66,22 @@ function main(snake, apple) {
     }
 }
 
-function updateScore() {
-    updateScoreFromLocalStorage()
+function isSnakeEatingApple(snake, apple) {
+    return snake.body[0].x === apple.x && snake.body[0].y === apple.y
+}
 
+function multiple(min, max) {
+    return Math.floor(Math.floor(Math.random() * (max + min)) / min) * min
+}
+
+function updateScore() {
     let parsedPlayerScore = Number(playerScore.textContent)
     playerScore.textContent = parsedPlayerScore + 1
-    score += 1
-    saveScoreToLocalStorage(score)
+    currentScore += 1
+    if (currentScore > highScore.textContent) {
+        saveScoreToLocalStorage(currentScore)
+        highScore.textContent = currentScore
+    }
 }
 
 function createSnakeCopy(snakeBody) {
@@ -90,12 +91,15 @@ function createSnakeCopy(snakeBody) {
     })
     return snakeCopy
 }
+
 function createCanvas() {
     createRect(0, 0, canvas.width, canvas.height, 'black')
 }
+
 function drawApple(apple) {
     createRect(apple.x, apple.y, 15, 15, 'green')
 }
+
 function createRect(x, y, w, h, color) {
     canvasContext.fillStyle = color
     canvasContext.fillRect(x, y, w, h)
@@ -110,38 +114,39 @@ function drawSnake(snake) {
             canvasContext.strokeRect(snake.body[i].x, snake.body[i].y, 15, 15)
             createRect(snake.body[i].x, snake.body[i].y, 10, 10, 'green')
         }
-
     }
-
 }
+
 function moveSnake(snake) {
     let snakeCopy = createSnakeCopy(snake.body)
     for (let i = 0; i < snake.body.length - 1; i++) {
         snake.body[i + 1] = { x: snakeCopy[i].x, y: snakeCopy[i].y }
     }
-
     if (snake.direction === 'UP') {
-        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - COORDINAATESs }
+        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y - COORDINATES }
     }
     if (snake.direction === 'DOWN') {
-        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + COORDINAATESs }
+        snake.body[0] = { x: snakeCopy[0].x, y: snakeCopy[0].y + COORDINATES }
     }
     if (snake.direction === 'RIGHT') {
-        snake.body[0] = { x: snakeCopy[0].x + COORDINAATESs, y: snakeCopy[0].y }
+        snake.body[0] = { x: snakeCopy[0].x + COORDINATES, y: snakeCopy[0].y }
     }
     if (snake.direction === 'LEFT') {
-        snake.body[0] = { x: snakeCopy[0].x - COORDINAATESs, y: snakeCopy[0].y }
+        snake.body[0] = { x: snakeCopy[0].x - COORDINATES, y: snakeCopy[0].y }
     }
 }
+
 function generateApple(apple) {
     return {
         x: multiple(15, canvas.width - 15),
         y: multiple(15, canvas.height - 15)
     }
 }
+
 function isSnakeCollidingWithWall(snake) {
     return (snake.body[0].x < -5 || snake.body[0].x > 600 || snake.body[0].y < 0 || snake.body[0].y > 600)
 }
+
 function isSnakeCollidingWithItSelf(snake) {
     for (let i = 1; i < snake.body.length; i++) {
         if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
@@ -150,18 +155,16 @@ function isSnakeCollidingWithItSelf(snake) {
     }
     return false
 }
-function gameOver(snake) {
-
-}
 
 function saveScoreToLocalStorage(score) {
     localStorage.setItem("Score", JSON.stringify(score))
+
 }
 
 function updateScoreFromLocalStorage() {
-    score = JSON.parse(localStorage.getItem("Score"))
-    if (score > highScore.textContent) {
-        highScore.textContent = score
+    scores = JSON.parse(localStorage.getItem("Score"))
+    if (scores !== null && scores > highScore.textContent) {
+        console.log(typeof (scores))
+        highScore.textContent = scores
     }
 }
-
