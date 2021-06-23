@@ -12,4 +12,4 @@ I remember playing this old classic Snake Game on a Nokia 3310 back when i was a
 
 # Author
 
-**Jonathan Jimenez** - Full Stack Software Developer - [LinkedIn](https://www.linkedin.com/in/jonathan-jimenez101/) | [Website](https://jonathan-jimenez.herokuapp.com/)
+**Jonathan Jimenez** - Full Stack Software Developer - [LinkedIn](https://www.linkedin.com/in/jonathan-jimenez101/) | [Website](https://www.jonathanjimenez.tech)
